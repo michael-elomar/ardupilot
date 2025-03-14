@@ -360,6 +360,15 @@ SITL_PKGS+=" ppp"
 # Install all packages
 $APT_GET install $BASE_PKGS $SITL_PKGS $PX4_PKGS $ARM_LINUX_PKGS $COVERAGE_PKGS
 
+PACKAGES_LOG="$HOME/workspace/ardupilot/apt_packages.txt"
+
+echo $BASE_PKGS > $PACKAGES_LOG
+echo $SITL_PKGS >> $PACKAGES_LOG
+echo $PX4_PKGS >> $PACKAGES_LOG
+echo $ARM_LINUX_PKGS >> $PACKAGES_LOG
+echo $COVERAGE_PKGS >> $PACKAGES_LOG
+
+
 if [[ $SKIP_AP_GRAPHIC_ENV -ne 1 ]]; then
     # If xfonts-base was just installed, you need to rebuild the font information cache.
     # https://discuss.ardupilot.org/t/using-the-gdb-window-on-a-high-dpi-display/128150/2
