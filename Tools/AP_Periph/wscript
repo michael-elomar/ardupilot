@@ -1,5 +1,6 @@
-#!/usr/bin/env python
 # encoding: utf-8
+
+# flake8: noqa
 
 import fnmatch
 import sys
@@ -84,6 +85,7 @@ def build(bld):
                      'GCS_MAVLink',
                      'AP_Relay',
                      'AP_MultiHeap',
+                     'AP_DAC'
                      ]
 
     bld.ap_stlib(

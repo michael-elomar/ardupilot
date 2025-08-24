@@ -156,6 +156,9 @@ public:
     uint16_t get_gyro_rate_hz(uint8_t instance) const { return uint16_t(_gyro_raw_sample_rates[instance] * _gyro_over_sampling[instance]); }
     uint16_t get_accel_rate_hz(uint8_t instance) const { return uint16_t(_accel_raw_sample_rates[instance] * _accel_over_sampling[instance]); }
 
+    // validate backend sample rates
+    bool pre_arm_check_gyro_backend_rate_hz(char* fail_msg, uint16_t fail_msg_len) const;
+
     // FFT support access
 #if HAL_GYROFFT_ENABLED
     const Vector3f& get_gyro_for_fft(void) const { return _gyro_for_fft[_first_usable_gyro]; }
@@ -195,7 +198,7 @@ public:
 
     // return the maximum gyro drift rate in radians/s/s. This
     // depends on what gyro chips are being used
-    float get_gyro_drift_rate(void) const { return ToRad(0.5f/60); }
+    float get_gyro_drift_rate(void) const { return radians(0.5f/60); }
 
     // update gyro and accel values from accumulated samples
     void update(void) __RAMFUNC__;
@@ -423,7 +426,7 @@ public:
     BatchSampler batchsampler{*this};
 #endif
 
-#if HAL_EXTERNAL_AHRS_ENABLED
+#if AP_EXTERNAL_AHRS_ENABLED
     // handle external AHRS data
     void handle_external(const AP_ExternalAHRS::ins_data_message_t &pkt);
 #endif
@@ -605,9 +608,6 @@ private:
     INS_PARAM_WRAPPER(_accel_offset);
     INS_PARAM_WRAPPER(_gyro_offset);
     INS_PARAM_WRAPPER(_accel_pos);
-
-    // accelerometer max absolute offsets to be used for calibration
-    float _accel_max_abs_offsets[INS_MAX_INSTANCES];
 
     // accelerometer and gyro raw sample rate in units of Hz
     float  _accel_raw_sample_rates[INS_MAX_INSTANCES];
